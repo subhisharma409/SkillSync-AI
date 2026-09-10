@@ -1,0 +1,21 @@
+import api from "./api";
+import { API_ENDPOINTS } from "../constants/api";
+
+const userService = {
+  getProfile: async () => {
+    const response = await api.get(API_ENDPOINTS.USER_PROFILE);
+    return response.data;
+  },
+
+  updateProfile: async (data) => {
+    const response = await api.put(API_ENDPOINTS.USER_PROFILE, data);
+    return response.data;
+  },
+
+  updateCodingProfiles: async (data) => {
+    const response = await api.put(API_ENDPOINTS.USER_CODING_PROFILES, data);
+    return response.data;
+  },
+};
+
+export default userService;

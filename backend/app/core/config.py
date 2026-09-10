@@ -1,0 +1,88 @@
+from functools import lru_cache
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """
+    Application settings loaded from environment variables.
+    """
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore",
+    )
+
+    # ------------------------------------------------------------------
+    # Application
+    # ------------------------------------------------------------------
+
+    APP_NAME: str = Field(default="SkillSync AI")
+    APP_VERSION: str = Field(default="1.0.0")
+    ENVIRONMENT: str = Field(default="development")
+    DEBUG: bool = Field(default=True)
+
+    # ------------------------------------------------------------------
+    # Server
+    # ------------------------------------------------------------------
+
+    HOST: str = Field(default="127.0.0.1")
+    PORT: int = Field(default=8000)
+
+    # ------------------------------------------------------------------
+    # Database
+    # ------------------------------------------------------------------
+
+    DATABASE_URL: str
+
+    # ------------------------------------------------------------------
+    # JWT
+    # ------------------------------------------------------------------
+
+    SECRET_KEY: str
+
+    ALGORITHM: str = Field(default="HS256")
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30)
+
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7)
+
+    # ------------------------------------------------------------------
+    # CORS
+    # ------------------------------------------------------------------
+
+    FRONTEND_URL: str = Field(default="http://localhost:5173")
+
+    # ------------------------------------------------------------------
+    # Logging
+    # ------------------------------------------------------------------
+
+    LOG_LEVEL: str = Field(default="INFO")
+
+    # ------------------------------------------------------------------
+    # AI Providers
+    # ------------------------------------------------------------------
+
+    OPENAI_API_KEY: str = Field(default="")
+    GEMINI_API_KEY: str = Field(default="")
+
+    # ------------------------------------------------------------------
+    # GitHub
+    # ------------------------------------------------------------------
+
+    GITHUB_CLIENT_ID: str = Field(default="")
+    GITHUB_CLIENT_SECRET: str = Field(default="")
+
+
+@lru_cache
+def get_settings() -> Settings:
+    """
+    Returns a cached Settings instance.
+    """
+    return Settings()
+
+
+settings = get_settings()
